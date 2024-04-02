@@ -77,20 +77,17 @@ def get_produto_by_name(form: ProdutoBuscaSchema):
 
     session = Session()
     
-    # Consulta ao banco de dados para encontrar o produto pelo nome
     produto = session.query(Produto).filter(Produto.nome == nome).first()
 
     if not produto:
         return jsonify({"mensagem": "Produto não encontrado"}), 404
 
-    # Verifica se o produto tem uma promoção associada
     if produto.promocao_id:
         promocao = session.query(Promocao).filter(Promocao.pk_promocao == produto.promocao_id).first()
         url_promocao = promocao.url if promocao else None
     else:
         url_promocao = None
         
-    # Retornando a representação do produto encontrado com a URL da promoção, se houver
     return jsonify({
         "nome": produto.nome,
         "categoria": produto.categoria,
