@@ -1,0 +1,2 @@
+from schema.produto import ProdutoSchema, apresenta_produto, ProdutoDelSchema, ProdutoBuscaSchema, ListagemProdutosSchema, apresenta_produtos
+from schema.promocao import apresenta_promocao, PromocaoSchema, PromocaoBuscaSchema, ListagemPromocoesSchema,PromocaoDelSchema,PromocaoInsertSchema
