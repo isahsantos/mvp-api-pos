@@ -41,8 +41,7 @@ def home():
     return redirect('/openapi')
 
 
-@app.get('/produtos', tags=[produto_tag],
-         responses={"200": ProdutoSchema, "404": {"description": "Produtos não encontrados"}})
+@app.get('/produtos', tags=[produto_tag], responses={"200": ProdutoSchema, "404": {"description": "Produtos não encontrados"}})
 def get_produtos():
     """Faz a busca por todos os Produtos cadastrados na base de dados 
 
@@ -54,9 +53,16 @@ def get_produtos():
     if not produtos:
         logger.info("Nenhum produto encontrado na base de dados")
         return {"produtos": []}, 404
-    else:
-        logger.info("Produtos encontrados na base de dados")
-        return apresenta_produtos(produtos), 200
+
+    produtos_json = []
+    for produto in produtos:
+        produto_data = apresenta_produto(produto) 
+        if produto.promocao:
+            produto_data['url_promocao'] = produto.promocao.url 
+        produtos_json.append(produto_data)
+
+    logger.info("Produtos encontrados na base de dados")
+    return jsonify(produtos_json), 200
 
 
 @app.post('/produtos/busca-por-nome', tags=[produto_tag])
@@ -65,23 +71,32 @@ def get_produto_by_name(form: ProdutoBuscaSchema):
     nome = form.nome
 
     if not nome:
-        logger.error("Nome do produto não fornecido")
-        return {"mensagem": "Nome do produto não fornecido"}, 400
-    
+        return jsonify({"mensagem": "Nome do produto não fornecido"}), 400
+
     nome = urllib.parse.unquote(nome)
 
     session = Session()
-
+    
+    # Consulta ao banco de dados para encontrar o produto pelo nome
     produto = session.query(Produto).filter(Produto.nome == nome).first()
 
     if not produto:
-        logger.info("Produto não encontrado")
-        return {"mensagem": "Produto não encontrado"}, 404
-    else:
-        logger.info("Produto encontrado")
-        # Retornando a representação do produto encontrado
-        return apresenta_produto(produto), 200
+        return jsonify({"mensagem": "Produto não encontrado"}), 404
 
+    # Verifica se o produto tem uma promoção associada
+    if produto.promocao_id:
+        promocao = session.query(Promocao).filter(Promocao.pk_promocao == produto.promocao_id).first()
+        url_promocao = promocao.url if promocao else None
+    else:
+        url_promocao = None
+        
+    # Retornando a representação do produto encontrado com a URL da promoção, se houver
+    return jsonify({
+        "nome": produto.nome,
+        "categoria": produto.categoria,
+        "valor": produto.valor,
+        "url_promocao": url_promocao
+    }), 200
 
 @app.post('/cadastrar-produto', tags=[produto_tag],
           responses={"201": ProdutoSchema})
