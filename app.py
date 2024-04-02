@@ -92,7 +92,8 @@ def get_produto_by_name(form: ProdutoBuscaSchema):
         "nome": produto.nome,
         "categoria": produto.categoria,
         "valor": produto.valor,
-        "url_promocao": url_promocao
+        "url_promocao": url_promocao,
+        "id_produto": produto.pk_produto
     }), 200
 
 @app.post('/cadastrar-produto', tags=[produto_tag],
