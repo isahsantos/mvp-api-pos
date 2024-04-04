@@ -6,10 +6,10 @@ from model.produto import Produto
 class ProdutoSchema(BaseModel):
     """ Define como um novo produto deve ser registrado
     """
-    nome: str = "Airfrye"
-    categoria: str = "Eletrodoméstico"
-    valor: float = 12.50
-    promocao_id: int = 1
+    nome: str 
+    categoria: str
+    valor: float 
+    promocao_id: int 
 
 
 def apresenta_produto(produto):
