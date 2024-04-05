@@ -79,7 +79,7 @@ A documentação da API pode ser encontrada nas seguintes ferramentas:
   - `nome` (string): Nome da promoção.
   - `divulgador` (string): Divulgador da promoção.
   - `url` (string): URL da promoção.
-  - `produtos` (lista): Lista de produtos associados à promoção.
+  - `produto_id` (lista): Id do produto associado à promoção.
 - **Respostas:**
   - 201 Created: Retorna uma mensagem de confirmação de que a promoção foi cadastrada com sucesso.
   - 400 Bad Request: Retorna uma mensagem de erro se os campos obrigatórios não forem fornecidos.
