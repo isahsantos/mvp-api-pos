@@ -6,6 +6,7 @@ from model.produto import Produto
 class ProdutoSchema(BaseModel):
     """ Define como um novo produto deve ser registrado
     """
+    id: str
     nome: str 
     categoria: str
     valor: float 
