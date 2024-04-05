@@ -6,7 +6,6 @@ from model.produto import Produto
 class ProdutoSchema(BaseModel):
     """ Define como um novo produto deve ser registrado
     """
-    id: str  = Field(..., description="Id do produto")
     nome: str  = Field(..., description="Nome do produto")
     categoria: str = Field(..., description="Categoria, exemplo: eletrônico")
     valor: float =  Field(..., description="Preço $valor.00")
