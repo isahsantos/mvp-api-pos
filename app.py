@@ -211,33 +211,38 @@ def get_promocao_by_name(form: PromocaoBuscaSchema):
 
 @app.post('/cadastrar-promocao', tags=[promocao_tag], responses={"201": {"description": "Promoção cadastrada com sucesso"}, "400": {"description": "Campos obrigatórios não fornecidos"}})
 def cadastrar_promocao(form: PromocaoInsertSchema):
-    # Verifica se todos os campos obrigatórios foram fornecidos
-    campos_necessarios = form.nome, form.divulgador, form.url
-    for campo in campos_necessarios:
-        if campo is None:
-            return jsonify({"mensagem": f"O campo '{campo}' é obrigatório"}), 400
 
-    # Cria uma nova promoção com os dados fornecidos
-    nova_promocao = Promocao(
-        nome=form.nome,
-        divulgador=form.divulgador,
-        url=form.url
-    )
+    nome = form.nome
+    divulgador = form.divulgador
+    url = form.url
+    produto_id =form.produto_id
 
-    # Adiciona a nova promoção ao banco de dados
+    if not nome or not divulgador or not url or not produto_id:
+        return jsonify({"mensagem": "Todos os campos são obrigatórios"}), 400
+
     session = Session()
-    session.add(nova_promocao)
-    session.commit()
 
-    # Adiciona os produtos associados à promoção
-    for produto in form.produtos:
-        novo_produto = Produto(nome=produto.nome, promocao=nova_promocao)
-        session.add(novo_produto)
-    session.commit()
+    try:
+        produto = session.query(Produto).filter_by(pk_produto=produto_id).first()
+        if not produto:
+            return jsonify({"mensagem": "Produto não encontrado"}), 404
 
-    session.close()
+        nova_promocao = Promocao(nome=nome, divulgador=divulgador, url=url)
+        session.add(nova_promocao)
+        session.commit()
 
-    return jsonify({"mensagem": "Promoção cadastrada com sucesso"}), 201
+        # Associando o produto à nova promoção
+        produto.promocao = nova_promocao
+        session.commit()
+
+        return jsonify({"mensagem": "Promoção cadastrada com sucesso"}), 201
+    except Exception as e:
+        session.rollback()
+        return jsonify({"mensagem": f"Erro ao cadastrar promoção: {str(e)}"}), 400
+    finally:
+        session.close()
+
+
 
 @app.delete('/remover-promocao', tags=[promocao_tag], responses={"200": {"description": "Promoção excluída com sucesso"}, "404": {"description": "Promoção não encontrada"}})
 def delete_promocao(form: PromocaoDelSchema):

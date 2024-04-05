@@ -57,4 +57,4 @@ class PromocaoInsertSchema(BaseModel):
     nome: str = Field(..., description="Nome da promoção")
     divulgador: str = Field(..., description="Divulgador da promoção")
     url: str = Field(..., description="URL da promoção")
-    produtos: List[ProdutoSchema] = Field(..., description="Produtos associados à promoção")
+    produto_id: int = Field(..., description="Produto associado à promoção")
