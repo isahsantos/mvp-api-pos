@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 from model.produto import Produto
 
@@ -6,11 +6,11 @@ from model.produto import Produto
 class ProdutoSchema(BaseModel):
     """ Define como um novo produto deve ser registrado
     """
-    id: str
-    nome: str 
-    categoria: str
-    valor: float 
-    promocao_id: int 
+    id: str  = Field(..., description="Id do produto")
+    nome: str  = Field(..., description="Nome do produto")
+    categoria: str = Field(..., description="Categoria, exemplo: eletrônico")
+    valor: float =  Field(..., description="Preço $valor.00")
+    promocao_id: int  =  Field(..., description="Id da promocao em que o produto está associado")
 
 
 def apresenta_produto(produto):
