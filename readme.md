@@ -1,4 +1,8 @@
-# API de Produtos e Promoções
+# API de Produtos e Promoções do App SHARED PROMO
+
+
+## Stack principal 
+[![](https://skillicons.dev/icons?i=flask,py)](https://skillicons.dev)
 
 ## Descrição
 Esta é uma API para gerenciar produtos e promoções, desenvolvida para a aplicação web sharedPromo. Ela oferece funcionalidades para adicionar, visualizar e remover produtos e promoções. 
