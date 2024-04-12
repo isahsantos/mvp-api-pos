@@ -23,10 +23,8 @@ def apresenta_produto(produto):
 
 
 class ProdutoBuscaSchema(BaseModel):
-    """ Define como deve ser a estrutura que representa a busca, que será
-        feita apenas com base no nome do produto.
-    """
-    nome: str = "Produto 1"
+    """Define a estrutura para busca de promoção por nome."""
+    nome: str
 
 
 class ListagemProdutosSchema(BaseModel):

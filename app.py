@@ -73,8 +73,6 @@ def get_produto_by_name(form: ProdutoBuscaSchema):
     if not nome:
         return jsonify({"mensagem": "Nome do produto não fornecido"}), 400
 
-    nome = urllib.parse.unquote(nome)
-
     session = Session()
     
     produto = session.query(Produto).filter(Produto.nome == nome).first()
