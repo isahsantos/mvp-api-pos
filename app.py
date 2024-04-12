@@ -229,7 +229,6 @@ def cadastrar_promocao(form: PromocaoInsertSchema):
         session.add(nova_promocao)
         session.commit()
 
-        # Associando o produto à nova promoção
         produto.promocao = nova_promocao
         session.commit()
 
@@ -251,13 +250,11 @@ def delete_promocao(form: PromocaoDelSchema):
 
     session = Session()
 
-    # Busca a promoção no banco de dados pelo ID fornecido
     promocao = session.query(Promocao).filter_by(pk_promocao=promocao_id).first()
 
     if not promocao:
         return jsonify({"mensagem": "Promoção não encontrada"}), 404
 
-    # Remove a promoção do banco de dados
     session.delete(promocao)
     session.commit()
 
